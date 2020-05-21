@@ -79,6 +79,10 @@ languageRouter
         req.app.get('db'),
         req.language.id
       )
+      const lang = await LanguageService.getUsersLanguage(
+        req.app.get('db'), 
+        req.user.id,
+      )
       if(!guess) {
         return res.status(400).json({ error: "Missing 'guess' in request body" })
       }
