@@ -154,6 +154,16 @@ class LinkedList {
         previousNode.next = currNode.next;
     }
 
+    displayList(){
+        let list = "";
+        let currNode = this.head;
+        while (currNode !== null) {
+            list += `${currNode.value.id} => `;
+            currNode = currNode.next;
+        }
+        console.log(list)
+    }
+
 }
 
 module.exports = LinkedList;
