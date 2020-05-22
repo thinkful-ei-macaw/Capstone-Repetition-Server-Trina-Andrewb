@@ -117,9 +117,11 @@ languageRouter
       }
    
     } catch(error) {
+      console.log(error)
       next(error)
     }
-    res.send('implement me!')
+    res.send(201)
+    console.log('guess sent')
   })
 
 module.exports = languageRouter
