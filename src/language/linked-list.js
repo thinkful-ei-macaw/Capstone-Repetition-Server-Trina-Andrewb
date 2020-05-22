@@ -94,8 +94,8 @@ class LinkedList {
         }
 
         const previous = this.getAt(index - 1);
-        let newNode = new _Node(data);
-        newNode.next = previous.next;
+        let newNode = new _Node(data, previous.next);
+        console.log(newNode)
         previous.next = newNode;
 
         return this.head;

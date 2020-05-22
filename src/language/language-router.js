@@ -136,7 +136,6 @@ languageRouter
         answer: oldHead.translation,
         isCorrect
       }
-      console.log(update)
    
     } catch(error) {
       console.log(error)
