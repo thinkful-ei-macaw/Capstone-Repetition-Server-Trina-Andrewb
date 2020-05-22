@@ -48,10 +48,15 @@ const LanguageService = {
     return db.from('language').update({total_score}).where({user_id})
   },
   getUpdatedHead(db, language_id, head) {
-    return db.from('language').where({language_id}).update({head})
+    return db.from('language').where({id: language_id}).update({head: head.id})
   },
-  getUpdatedWord(db, language_id, memory_value, incorrect_count, correct_count, next) {
-    return db.from('word').where({language_id}).update({memory_value, incorrect_count, correct_count, next})
+  async saveLinkedList(db, list) {
+    let walk = list.head
+    while(walk) {
+      await db.from('word').where({id: walk.value.id}).update({next: walk.next && walk.next.value.id, memory_value: walk.value.memory_value, correct_count: walk.value.correct_count, incorrect_count: walk.value.incorrect_count})
+      walk = walk.next
+      console.log(walk)
+    }
   }
 }
 

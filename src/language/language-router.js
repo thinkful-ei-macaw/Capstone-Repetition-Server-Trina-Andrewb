@@ -101,47 +101,64 @@ languageRouter
       newList.displayList();
 
       let oldHead = newList.head.value;
-      let currentNode = oldHead;
       let isCorrect;
       let language = req.language
-      if(guess !== currentNode.translation) {
-        currentNode.incorrect_count++;
-        currentNode.memory_value = 1;
+
+      
+      if(guess !== oldHead.translation) {
+        oldHead.incorrect_count++;
+        oldHead.memory_value = 1;
         isCorrect = false;
       }
-      if (guess === currentNode.translation) {
-        currentNode.correct_count++;
-        currentNode.memory_value *= 2;
+      if (guess === oldHead.translation) {
+        oldHead.correct_count++;
+        oldHead.memory_value *= 2;
         language.total_score++;
         isCorrect = true;
       }
 
       newList.remove(oldHead)
-      newList.insertAt(currentNode.memory_value, currentNode)
+      newList.insertAt(oldHead.memory_value, oldHead)
 
-      let updatedWord = await LanguageService.getUpdatedWord(
+      let updatedWord = await LanguageService.saveLinkedList(
+        req.app.get('db'),
+        newList
+      )
+      
+      newList.head.value.next = newList.next && newList.next.value.id
+
+      let updatedHead = await LanguageService.getUpdatedHead(
         req.app.get('db'),
         req.language.id,
-        currentNode.memory_value,
-        currentNode.incorrect_count,
-        currentNode.correct_count,
-        currentNode.next
+        newList.head.value
       )
 
+      let scoreUpdate = await LanguageService.getUpdatedScore(
+        req.app.get('db'),
+        req.user.id, 
+        language.total_score
+      )
+
+      await LanguageService.getWordHead(
+        req.app.get('db'),
+        newList.head.id
+      )
+     
       let update = {
         nextWord: updatedWord.original,
-        totalScore: 0,
+        totalScore: language.total_score,
         wordCorrectCount: updatedWord.correct_count,
         wordIncorrectCount: updatedWord.incorrect_count,
         answer: oldHead.translation,
         isCorrect
       }
-   
+
+    res.json(update)
     } catch(error) {
       console.log(error)
       next(error)
     }
-    res.send(201)
+    
     
   })
 

@@ -60,46 +60,27 @@ class LinkedList {
         previous.next = new _Node(item, current);
     }
 
-    // A helper function getAt() is defined to get to the desired position.
-
-    getAt(index) {
-        if (this.head === null) { // if head is null return empty 
-        this.insertFirst(index);
-        return;
+    insertAt(nthPosition, itemToInsert) {
+        if (nthPosition < 0) {
+            throw new Error('Position error');
         }
-        let count = 0;
-        let node = this.head;
-        while (node) {
-        if (count === index) {
-            return node;
+        if (nthPosition === 0) {
+            this.insertFirst(itemToInsert);
+        }else {
+            // Find the node which we want to insert after
+            const node = this._findNthElement(nthPosition - 1);
+            const newNode = new _Node(itemToInsert, null);
+            newNode.next = node.next; 
+            node.next = newNode;
         }
-        count++;
-        node = node.next;
-        }
-        return null;
     }
 
-    insertAt(data, index) {
-
-        // if the list is empty
-        if (!this.head) {
-        this.insertFirst(data);
-        return;
+    _findNthElement(position) {
+        let node = this.head;
+        for (let i=0; i<position; i++) {
+            node = node.next;
         }
-
-        // if new node needs to be inserted at the front of list before the head
-        if (index === 0) {
-        this.head = new _Node(data, this.head);
-        return;
-        }
-
-        const previous = this.getAt(index - 1);
-        let newNode = new _Node(data, previous.next);
-        console.log(newNode)
-        previous.next = newNode;
-
-        return this.head;
-
+        return node;
     }
     
 
