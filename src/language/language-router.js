@@ -153,13 +153,11 @@ languageRouter
         isCorrect
       }
 
-    res.json(update)
+    res.json(update).send(update)
     } catch(error) {
       console.log(error)
       next(error)
-    }
-    
-    
+    } 
   })
 
 module.exports = languageRouter
