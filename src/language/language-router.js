@@ -101,14 +101,19 @@ languageRouter
       newList.displayList();
 
       let oldHead = newList.head.value;
-      let answer;
+      let currentNode = oldHead;
+      let isCorrect;
 
-      if(guess !== newList.head.value.translation) {
-        answer = false;
-        oldHead.memory_value = 1;
-        oldHead.incorrect_count = oldHead.incorrect_count + 1;
-        newList.remove(oldHead)
-        newList.insertAt(oldHead.memory_value, oldHead)
+      if(guess !== currentNode.translation) {
+        currentNode.incorrect_count++;
+        currentNode.memory_value = 1;
+        isCorrect = false;
+      }
+      if (guess === currentNode.translation) {
+        currentNode.correct_count++;
+        currentNode.memory_value *= 2;
+        language.total_score++;
+        isCorrect = true;
       }
    
     } catch(error) {
