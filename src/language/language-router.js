@@ -103,7 +103,7 @@ languageRouter
       let oldHead = newList.head.value;
       let currentNode = oldHead;
       let isCorrect;
-
+      let language = req.language
       if(guess !== currentNode.translation) {
         currentNode.incorrect_count++;
         currentNode.memory_value = 1;
@@ -115,13 +115,35 @@ languageRouter
         language.total_score++;
         isCorrect = true;
       }
+
+      newList.remove(oldHead)
+      newList.insertAt(currentNode.memory_value, currentNode)
+
+      let updatedWord = await LanguageService.getUpdatedWord(
+        req.app.get('db'),
+        req.language.id,
+        currentNode.memory_value,
+        currentNode.incorrect_count,
+        currentNode.correct_count,
+        currentNode.next
+      )
+
+      let update = {
+        nextWord: updatedWord.original,
+        totalScore: 0,
+        wordCorrectCount: updatedWord.correct_count,
+        wordIncorrectCount: updatedWord.incorrect_count,
+        answer: oldHead.translation,
+        isCorrect
+      }
+      console.log(update)
    
     } catch(error) {
       console.log(error)
       next(error)
     }
     res.send(201)
-    console.log('guess sent')
+    
   })
 
 module.exports = languageRouter
