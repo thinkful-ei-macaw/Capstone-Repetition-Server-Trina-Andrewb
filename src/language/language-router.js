@@ -120,28 +120,28 @@ languageRouter
       newList.remove(oldHead)
       newList.insertAt(oldHead.memory_value, oldHead)
 
-      let updatedWord = await LanguageService.saveLinkedList(
+      await LanguageService.saveLinkedList(
         req.app.get('db'),
         newList
       )
       
       newList.head.value.next = newList.next && newList.next.value.id
-
-      let updatedHead = await LanguageService.getUpdatedHead(
+      
+      await LanguageService.updateHead(
         req.app.get('db'),
         req.language.id,
         newList.head.value
       )
 
-      let scoreUpdate = await LanguageService.getUpdatedScore(
+      await LanguageService.updateScore(
         req.app.get('db'),
         req.user.id, 
         language.total_score
       )
-
-      await LanguageService.getWordHead(
+      
+      let updatedWord = await LanguageService.getWordHead(
         req.app.get('db'),
-        newList.head.id
+        newList.head.value.id
       )
      
       let update = {
