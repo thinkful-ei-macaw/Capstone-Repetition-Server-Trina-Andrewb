@@ -153,7 +153,7 @@ languageRouter
         isCorrect
       }
 
-    res.json(update).send(update)
+    res.json(update)
     } catch(error) {
       console.log(error)
       next(error)
