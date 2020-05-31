@@ -150,6 +150,7 @@ languageRouter
         wordCorrectCount: updatedWord.correct_count,
         wordIncorrectCount: updatedWord.incorrect_count,
         answer: oldHead.translation,
+        original: oldHead.original,
         isCorrect
       }
 
